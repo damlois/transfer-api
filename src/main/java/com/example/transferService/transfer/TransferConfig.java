@@ -21,8 +21,8 @@ public class TransferConfig {
 			
 			accountRepo.saveAll(List.of(acct1, acct2));
 			
-			Balance bal1 = new Balance (309854769, 32464364623L);
-			Balance bal2 = new Balance (674389065, 83636837232L);
+			Balance bal1 = new Balance (309854769, 3000L);
+			Balance bal2 = new Balance (674389065, 1000L);
 			
 			balanceRepo.saveAll(List.of(bal1, bal2));
 			
