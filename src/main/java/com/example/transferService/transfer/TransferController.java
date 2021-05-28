@@ -10,22 +10,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(path="api/v1/transfer")
+@RequestMapping(path="api/v1/transapp")
 public class TransferController {
 	private final TransactionService transactionService;
+	private final BalanceService balanceService;
 		
 	@Autowired
-	public TransferController(TransactionService transactionService) {
+	public TransferController(TransactionService transactionService, BalanceService balanceService) {
 		this.transactionService = transactionService;
+		this.balanceService = balanceService;
 	}
 
-	@GetMapping
+	@GetMapping(path = "transactions")
 	public List<Transaction> getAllTransactions() {
 		return transactionService.getAllTransactions();	
 	}
 	
-	@GetMapping(path = "{accountNumber}")
+	@GetMapping(path = "transactions/{accountNumber}")
 	public List<Transaction> getAccountTransactions(@PathVariable("accountNumber") Integer accountNumber) {
 		return transactionService.getAccountTransactions(accountNumber);	
 	}
+	
+	@GetMapping(path = "balance/{accountNumber}")
+	public Balance getAccountBalance(@PathVariable("accountNumber") Integer accountNumber) {
+		return balanceService.getAccountBalance(accountNumber);
+	}
+	
+//	@PostMapping(path = "transfer")
+//	public void transferMoney(@RequestBody )
 }
