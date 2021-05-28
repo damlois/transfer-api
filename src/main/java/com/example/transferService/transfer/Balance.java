@@ -1,14 +1,21 @@
 package com.example.transferService.transfer;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class Balance {
-	public Account account;
+	@Id
+	public Integer accountNumber;
 	public Long balance;
 	
-	public Account getAccount() {
-		return account;
+	public Integer getAccountNumber() {
+		return accountNumber;
 	}
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setAccountNumber(Integer accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 	public Long getBalance() {
 		return balance;
@@ -19,13 +26,13 @@ public class Balance {
 	
 	public Balance() {
 	}
-	public Balance(Account account, Long balance) {
-		this.account = account;
+	public Balance(Integer accountNumber, Long balance) {
+		this.accountNumber = accountNumber;
 		this.balance = balance;
 	}
 	
 	@Override
 	public String toString() {
-		return "Balance [account=" + account + ", balance=" + balance + "]";
+		return "Balance [account=" + accountNumber + ", balance=" + balance + "]";
 	}
 }
