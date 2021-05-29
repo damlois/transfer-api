@@ -62,19 +62,18 @@ public class TransactionService {
 			}
 		}
 		
-		checkAccountExists(transferPayload.toAccount);
-		
-		Balance senderBalance = (balanceRepository.getBalance(transferPayload.fromAccount)).get();
-		Balance receiverBalance = (balanceRepository.getBalance(transferPayload.toAccount)).get();
 		
 		if(transferPayload.amount <= 0) {
 			throw new IllegalStateException(
 					"Invalid amount. Amount must be greater than 0");
 		}
 		
+		Balance senderBalance = (balanceRepository.getBalance(transferPayload.fromAccount)).get();
+		Balance receiverBalance = (balanceRepository.getBalance(transferPayload.toAccount)).get();
+		
 		if(senderBalance.balance < transferPayload.amount) {
 			throw new IllegalStateException(
-					"Transfer successful. Insufficient Balance");
+					"Transfer unsuccessful. Insufficient Balance");
 		}
 		
 		senderBalance.setBalance(senderBalance.balance - transferPayload.amount);
