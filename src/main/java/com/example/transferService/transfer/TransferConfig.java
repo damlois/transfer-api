@@ -1,5 +1,6 @@
 package com.example.transferService.transfer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -29,13 +30,17 @@ public class TransferConfig {
 			Transaction transact1 = new Transaction(
 					"23XsEtrsasf",
 					78700000L,
-					acct1
+					acct1,
+					acct2,
+					LocalDateTime.now()
 			);	
 			
 			Transaction transact2 = new Transaction(
 					"Jggsd564E",
 					176000L,
-					acct2
+					acct2,
+					acct1,
+					LocalDateTime.now()
 			);	
 			
 			transactionRepo.saveAll(List.of(transact1, transact2));

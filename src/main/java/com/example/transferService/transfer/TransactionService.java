@@ -3,6 +3,9 @@ package com.example.transferService.transfer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,9 +46,21 @@ public class TransactionService {
 
 	@Transactional
 	public TransferResource transferMoney(TransferPayload transferPayload) {
-		Account fromAccount = accountRepository.findById(transferPayload.fromAccount)
-				.orElseThrow(() -> new IllegalStateException(
-						"Account " + transferPayload.fromAccount + " does not exist"));
+		Account fromAccount = getAccount(transferPayload.fromAccount);
+		Account toAccount = getAccount(transferPayload.toAccount);
+		
+		List<Transaction> possibleDuplicateTransactions = (transactionRepository.getDuplicateTransactions(
+				fromAccount, toAccount, transferPayload.amount)).get();
+		
+		int size = possibleDuplicateTransactions.size();
+		if(size > 0) {
+			Long duration = ChronoUnit.SECONDS.between(possibleDuplicateTransactions.get(size - 1).createdAt, LocalDateTime.now());
+			
+			if(duration < 30) {
+				throw new IllegalStateException(
+						"Possible duplicate transaction!");
+			}
+		}
 		
 		checkAccountExists(transferPayload.toAccount);
 		
@@ -68,7 +83,9 @@ public class TransactionService {
 		Transaction transaction = new Transaction(
 				generateReferenceNumber(),
 				transferPayload.amount,
-				fromAccount
+				fromAccount,
+				toAccount,
+				LocalDateTime.now()
 		);
 		
 		transactionRepository.save(transaction);
@@ -82,6 +99,12 @@ public class TransactionService {
 			throw new IllegalStateException(
 					"Account " + accountNumber + " does not exist");
 		}
+	}
+	
+	private Account getAccount(Integer accountNumber) {
+		return accountRepository.findById(accountNumber)
+		.orElseThrow(() -> new IllegalStateException(
+				"Account " + accountNumber + " does not exist"));
 	}
 	
 	private String generateReferenceNumber() {
