@@ -1,5 +1,7 @@
 package com.example.transferService.transfer;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -12,10 +14,31 @@ public class Transaction {
 	public String reference;
 	public Long amount;
 	@ManyToOne
-	public Account account;
+	public Account fromAccount;
+	@ManyToOne
+	public Account toAccount;
+	public LocalDateTime createdAt;
 	
 	public String getReference() {
 		return reference;
+	}
+	public Account getFromAccount() {
+		return fromAccount;
+	}
+	public void setFromAccount(Account fromAccount) {
+		this.fromAccount = fromAccount;
+	}
+	public Account getToAccount() {
+		return toAccount;
+	}
+	public void setToAccount(Account toAccount) {
+		this.toAccount = toAccount;
+	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 	public void setReference(String reference) {
 		this.reference = reference;
@@ -26,23 +49,14 @@ public class Transaction {
 	public void setAmount(Long amount) {
 		this.amount = amount;
 	}
-	public Account getAccount() {
-		return account;
-	}
-	public void setAccount(Account account) {
-		this.account = account;
-	}
 	
 	public Transaction() {
 	}
-	public Transaction(String reference, Long amount, Account account) {
+	public Transaction(String reference, Long amount, Account fromAccount, Account toAccount, LocalDateTime createdAt) {
 		this.reference = reference;
 		this.amount = amount;
-		this.account = account;
-	}
-	@Override
-	public String toString() {
-		return "Transaction [reference=" + reference + ", amount=" + amount + ", account=" + account + "]";
-	}
-	
+		this.fromAccount = fromAccount;
+		this.toAccount = toAccount;
+		this.createdAt = createdAt;
+	}	
 }
